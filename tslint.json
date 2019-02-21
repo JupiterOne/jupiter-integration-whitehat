@@ -1,0 +1,7 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "rules": {
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "interface-name": false
+  }
+}
