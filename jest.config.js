@@ -3,10 +3,11 @@ module.exports = {
     "^.+\\.tsx?$": "ts-jest",
   },
   testMatch: ["<rootDir>/src/**/*.test.{js,ts}"],
-  collectCoverageFrom: ["src/**/*.ts"],
-  coveragePathIgnorePatterns: [
-    "<rootDir>/src/index.ts",
-    "<rootDir>/src/ProviderClient.ts",
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/index.ts",
+    "!src/executionHandler.ts",
+    "!src/whitehat-client.d.ts",
   ],
   moduleFileExtensions: ["ts", "js"],
   testEnvironment: "node",
