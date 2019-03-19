@@ -4,7 +4,9 @@ import {
   PersisterOperationsResult,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 import WhitehatClient from "@jupiterone/whitehat-client";
+import pMap from "p-map";
 import {
+  ApplicationData,
   toAccountEntity,
   toCVEEntities,
   toFindingEntity,
@@ -40,21 +42,25 @@ export default async function synchronize(
   const cveMap: CVEEntityMap = {};
   const serviceMap: ServiceEntityMap = {};
   const findingMap: FindingEntityMap = {};
-  // TODO: process applications in parallel using ~*P R O M I S E S*~
-  for (const application of applications) {
-    const findings = await whitehat.getVulnerabilities(application.id);
 
-    for (const finding of findings) {
-      vulnerabilityMap[finding.class] = toVulnerabilityEntity(finding);
+  await pMap(
+    applications,
+    async (application: ApplicationData) => {
+      const findings = await whitehat.getVulnerabilities(application.id);
 
-      cveMap[finding.class] = toCVEEntities(finding);
-      // TODO: fetch dynamic scans from dynamic scan api
-      serviceMap.STATIC = toServiceEntity();
+      for (const finding of findings) {
+        vulnerabilityMap[finding.class] = toVulnerabilityEntity(finding);
 
-      findingMap[finding.class] = findingMap[finding.class] || [];
-      findingMap[finding.class].push(toFindingEntity(finding, application));
-    }
-  }
+        cveMap[finding.class] = toCVEEntities(finding);
+        // TODO: fetch dynamic scans from dynamic scan api
+        serviceMap.STATIC = toServiceEntity();
+
+        findingMap[finding.class] = findingMap[finding.class] || [];
+        findingMap[finding.class].push(toFindingEntity(finding, application));
+      }
+    },
+    { concurrency: 3 },
+  );
 
   const { persister } = context.clients.getClients();
   return persister.publishPersisterOperations(
