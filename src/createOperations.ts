@@ -143,14 +143,7 @@ async function toEntityOperations<T extends EntityFromIntegration>(
   type: string,
 ): Promise<EntityOperation[]> {
   const { graph, persister } = context.clients.getClients();
-
-  const oldEntities = await graph.findEntities({
-    _accountId: context.instance.accountId,
-    _deleted: false,
-    _integrationInstanceId: context.instance.id,
-    _type: type,
-  });
-
+  const oldEntities = await graph.findEntitiesByType(type);
   return persister.processEntities(oldEntities, entities);
 }
 
@@ -160,13 +153,6 @@ async function toRelationshipOperations<T extends RelationshipFromIntegration>(
   type: string,
 ): Promise<RelationshipOperation[]> {
   const { graph, persister } = context.clients.getClients();
-
-  const oldRelationships = await graph.findRelationships({
-    _accountId: context.instance.accountId,
-    _deleted: false,
-    _integrationInstanceId: context.instance.id,
-    _type: type,
-  });
-
+  const oldRelationships = await graph.findRelationshipsByType(type);
   return persister.processRelationships(oldRelationships, relationships);
 }
