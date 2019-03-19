@@ -1,15 +1,23 @@
-import { createTestIntegrationExecutionContext } from "@jupiterone/jupiter-managed-integration-sdk";
+import {
+  createTestIntegrationExecutionContext,
+  IntegrationInstanceAuthenticationError,
+} from "@jupiterone/jupiter-managed-integration-sdk";
+import mockWhitehatClient from "../test/helpers/mockWhitehatClient";
 import invocationValidator from "./invocationValidator";
 import { WhitehatIntegrationInstanceConfig } from "./types";
 
-test("passes with valid config", async () => {
-  const config: WhitehatIntegrationInstanceConfig = {
-    whitehatApiKey: "api-key",
-  };
+jest.mock("@jupiterone/whitehat-client", () => {
+  return jest.fn().mockImplementation(() => mockWhitehatClient);
+});
 
+const validConfig: WhitehatIntegrationInstanceConfig = {
+  whitehatApiKey: "api-key",
+};
+
+test("passes with valid config", async () => {
   const executionContext = createTestIntegrationExecutionContext({
     instance: {
-      config,
+      config: validConfig,
     },
   });
 
@@ -25,7 +33,7 @@ test("throws error if config not provided", async () => {
   );
 });
 
-test("throws error if API id and secret are not provided in instance config", async () => {
+test("throws error if API key is not provided in instance config", async () => {
   const executionContext = createTestIntegrationExecutionContext({
     instance: {
       config: {},
@@ -33,5 +41,21 @@ test("throws error if API id and secret are not provided in instance config", as
   });
   await expect(invocationValidator(executionContext)).rejects.toThrow(
     "whitehatApiKey is required",
+  );
+});
+
+test("throws error if Whitehat responds with error to resource call", async () => {
+  const executionContext = createTestIntegrationExecutionContext({
+    instance: {
+      config: validConfig,
+    },
+  });
+
+  mockWhitehatClient.getResources = () => {
+    throw new Error("401");
+  };
+
+  await expect(invocationValidator(executionContext)).rejects.toThrow(
+    IntegrationInstanceAuthenticationError,
   );
 });
