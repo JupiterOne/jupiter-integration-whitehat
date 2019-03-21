@@ -97,7 +97,7 @@ export function toCVEEntities(finding: FindingData): CVEEntity[] {
 
   for (const cve of finding.cve_reference.collection) {
     cveEntities.push({
-      _class: "Weakness",
+      _class: "Vulnerability",
       _key: cve.title,
       _type: WHITEHAT_CVE_ENTITY_TYPE,
       name: cve.title,
