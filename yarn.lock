@@ -926,10 +926,10 @@
   resolved "https://registry.npmjs.org/@jupiterone/jupiter-managed-integration-sdk/-/jupiter-managed-integration-sdk-20.0.0.tgz#004f40182860e8840069acc6708e1d9892f91b02"
   integrity sha512-xtl5FedzzlL7hk/dloxKogNKKdk4jmiiO7uMJH02K7SkYZde8VqT4i6dyAR3nDo4gNurWZMfg9YCzvSfX40WbQ==
 
-"@jupiterone/whitehat-client@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/@jupiterone/whitehat-client/-/whitehat-client-0.2.1.tgz#c6740e14e13451a6806e136d22412674c4d36691"
-  integrity sha512-x92Bu9Ut+YFX8szt7ve+AadlZi+KXTdKYHQ2r5STOqz5CCIaEQ1KkcwRsA9lfp+k/rmEVvh8iQl1OB17Bcgl0A==
+"@jupiterone/whitehat-client@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/@jupiterone/whitehat-client/-/whitehat-client-0.3.0.tgz#b6abaa8a7fade073b90d7124338b9fc66c6b68ce"
+  integrity sha512-0ebKvqxfCCKHRgs3lsw6Xeiy+Ehu0Eeg0bUALcM+QMInd428vzHiSEupkhe12mQBw3gjJDbTW5WYU/NscX8uZg==
   dependencies:
     request "^2.88.0"
     request-promise-native "^1.0.7"

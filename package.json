@@ -22,8 +22,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jupiterone/whitehat-client": "^0.2.1",
-    "p-map": "^2.0.0"
+    "@jupiterone/whitehat-client": "^0.3.0"
   },
   "peerDependencies": {
     "@jupiterone/jupiter-managed-integration-sdk": "^20.0.0"

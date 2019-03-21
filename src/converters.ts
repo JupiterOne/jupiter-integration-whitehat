@@ -46,6 +46,8 @@ interface CVEReference {
 export interface FindingData {
   id: number;
 
+  application: ApplicationData;
+
   status: string;
 
   cve_reference: CVEReference;
@@ -128,16 +130,13 @@ export function toVulnerabilityEntity(
   };
 }
 
-export function toFindingEntity(
-  finding: FindingData,
-  application: ApplicationData,
-): FindingEntity {
+export function toFindingEntity(finding: FindingData): FindingEntity {
   return {
     _class: "Vulnerability",
     _key: `whitehat-finding-${finding.id}`,
     _type: WHITEHAT_FINDING_ENTITY_TYPE,
 
-    impacts: application.label.split("/").pop() as string,
+    impacts: finding.application.label.split("/").pop() as string,
 
     open: finding.status === "open",
 
