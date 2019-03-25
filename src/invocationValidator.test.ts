@@ -51,9 +51,9 @@ test("throws error if Whitehat responds with error to resource call", async () =
     },
   });
 
-  mockWhitehatClient.getResources = () => {
+  mockWhitehatClient.getResources = jest.fn().mockImplementation(() => {
     throw new Error("401");
-  };
+  });
 
   await expect(invocationValidator(executionContext)).rejects.toThrow(
     IntegrationInstanceAuthenticationError,

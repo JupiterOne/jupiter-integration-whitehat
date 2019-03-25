@@ -14,6 +14,7 @@ const mockApplication: ApplicationData = {
 };
 
 const mockFinding: FindingData = {
+  application: mockApplication,
   class: "My.Mock.Class",
   class_readable: "My Mock Class",
   closed: null,
@@ -45,15 +46,6 @@ const mockResources: ResourcesData = {
 };
 
 export default {
-  getApplications() {
-    return [mockApplication];
-  },
-
-  getVulnerabilities() {
-    return [mockFinding];
-  },
-
-  getResources() {
-    return mockResources;
-  },
+  getVulnerabilities: jest.fn().mockResolvedValue([mockFinding]),
+  getResources: jest.fn().mockResolvedValue(mockResources),
 };
