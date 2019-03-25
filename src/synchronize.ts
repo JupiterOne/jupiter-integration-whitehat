@@ -27,6 +27,8 @@ import {
 export default async function synchronize(
   context: IntegrationExecutionContext<IntegrationInvocationEvent>,
 ): Promise<PersisterOperationsResult> {
+  const { persister, jobs } = context.clients.getClients();
+
   const config = context.instance.config as WhitehatIntegrationInstanceConfig;
 
   const whitehat = new WhitehatClient(config.whitehatApiKey);
@@ -41,8 +43,20 @@ export default async function synchronize(
   const serviceMap: ServiceEntityMap = {};
   const findingMap: FindingEntityMap = {};
 
+  const queryParams = ["query_status=open,closed"];
+
+  const lastJob = await jobs.getLastCompleted();
+  if (lastJob) {
+    const lastJobCreatedDate = new Date(lastJob.createDate).toISOString();
+    queryParams.push(
+      `query_opened_after=${lastJobCreatedDate}`,
+      `query_closed_after=${lastJobCreatedDate}`,
+      `query_found_after=${lastJobCreatedDate}`,
+    );
+  }
+
   const findings: FindingData[] = await whitehat.getVulnerabilities({
-    queryParams: ["query_status=open,closed"],
+    queryParams,
   });
 
   for (const finding of findings) {
@@ -56,7 +70,6 @@ export default async function synchronize(
     findingMap[finding.class].push(toFindingEntity(finding));
   }
 
-  const { persister } = context.clients.getClients();
   return persister.publishPersisterOperations(
     await createOperationsFromAccount(context, account),
     await createOperationsFromFindings(

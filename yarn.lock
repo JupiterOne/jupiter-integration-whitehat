@@ -921,10 +921,10 @@
     "@types/istanbul-lib-coverage" "^1.1.0"
     "@types/yargs" "^12.0.9"
 
-"@jupiterone/jupiter-managed-integration-sdk@^20.0.0":
-  version "20.0.0"
-  resolved "https://registry.npmjs.org/@jupiterone/jupiter-managed-integration-sdk/-/jupiter-managed-integration-sdk-20.0.0.tgz#004f40182860e8840069acc6708e1d9892f91b02"
-  integrity sha512-xtl5FedzzlL7hk/dloxKogNKKdk4jmiiO7uMJH02K7SkYZde8VqT4i6dyAR3nDo4gNurWZMfg9YCzvSfX40WbQ==
+"@jupiterone/jupiter-managed-integration-sdk@^20.1.0":
+  version "20.1.0"
+  resolved "https://registry.npmjs.org/@jupiterone/jupiter-managed-integration-sdk/-/jupiter-managed-integration-sdk-20.1.0.tgz#70b3df44f1a92d1973401ec99a8a05e13c4fe482"
+  integrity sha512-chHD/9NL+6SL19i7ACjlrYJgAtkXEHgZE2X2HpR7ogyP9cHnX2NXEaPP0KEKXChzPy/UmqsjL5EAxqk5qvaeuA==
 
 "@jupiterone/whitehat-client@^0.3.0":
   version "0.3.0"
