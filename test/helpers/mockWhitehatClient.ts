@@ -46,11 +46,6 @@ const mockResources: ResourcesData = {
 };
 
 export default {
-  getVulnerabilities() {
-    return [mockFinding];
-  },
-
-  getResources() {
-    return mockResources;
-  },
+  getVulnerabilities: jest.fn().mockResolvedValue([mockFinding]),
+  getResources: jest.fn().mockResolvedValue(mockResources),
 };
