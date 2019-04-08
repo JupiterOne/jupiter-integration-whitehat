@@ -3,13 +3,14 @@ import {
   IntegrationInvocationEvent,
   PersisterOperationsResult,
 } from "@jupiterone/jupiter-managed-integration-sdk";
+import JobsClient from "@jupiterone/jupiter-managed-integration-sdk/service/JobsClient";
 import WhitehatClient from "@jupiterone/whitehat-client";
+import { DEFAULT_SERVICE_ENTITY_MAP } from "./constants";
 import {
   FindingData,
   toAccountEntity,
   toCVEEntities,
   toFindingEntity,
-  toServiceEntity,
   toVulnerabilityEntity,
 } from "./converters";
 import {
@@ -20,32 +21,26 @@ import {
   CVEEntityMap,
   FindingEntityMap,
   ServiceEntityMap,
+  VulnerabilityEntity,
   VulnerabilityEntityMap,
   WhitehatIntegrationInstanceConfig,
 } from "./types";
 
-export default async function synchronize(
-  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
-): Promise<PersisterOperationsResult> {
-  const { persister, jobs } = context.clients.getClients();
+interface ProcessFindingsResults {
+  vulnerabilities: VulnerabilityEntity[];
 
-  const config = context.instance.config as WhitehatIntegrationInstanceConfig;
+  cveMap: CVEEntityMap;
+  findingMap: FindingEntityMap;
+  serviceMap: ServiceEntityMap;
+}
 
-  const whitehat = new WhitehatClient(config.whitehatApiKey);
-
-  const account = toAccountEntity(
-    (await whitehat.getResources()).account,
-    context.instance,
-  );
-
-  const vulnerabilityMap: VulnerabilityEntityMap = {};
-  const cveMap: CVEEntityMap = {};
-  const serviceMap: ServiceEntityMap = {};
-  const findingMap: FindingEntityMap = {};
-
+async function getFindings(
+  whitehatClient: any,
+  jobsClient: JobsClient,
+): Promise<FindingData[]> {
   const queryParams = ["query_status=open,closed"];
 
-  const lastJob = await jobs.getLastCompleted();
+  const lastJob = await jobsClient.getLastCompleted();
   if (lastJob) {
     const lastJobCreatedDate = new Date(lastJob.createDate).toISOString();
     queryParams.push(
@@ -55,27 +50,57 @@ export default async function synchronize(
     );
   }
 
-  const findings: FindingData[] = await whitehat.getVulnerabilities({
+  return await whitehatClient.getVulnerabilities({
     queryParams,
   });
+}
+
+function processFindings(findings: FindingData[]): ProcessFindingsResults {
+  const cveMap: CVEEntityMap = {};
+  const vulnerabilityMap: VulnerabilityEntityMap = {};
+  const serviceMap: ServiceEntityMap = DEFAULT_SERVICE_ENTITY_MAP;
+  const findingMap: FindingEntityMap = {};
 
   for (const finding of findings) {
     vulnerabilityMap[finding.class] = toVulnerabilityEntity(finding);
 
     cveMap[finding.class] = toCVEEntities(finding);
-    // TODO: fetch dynamic scans from dynamic scan api
-    serviceMap.STATIC = toServiceEntity();
 
     findingMap[finding.class] = findingMap[finding.class] || [];
     findingMap[finding.class].push(toFindingEntity(finding));
   }
+
+  return {
+    vulnerabilities: Object.values(vulnerabilityMap),
+
+    cveMap,
+    findingMap,
+    serviceMap,
+  };
+}
+
+export default async function synchronize(
+  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
+): Promise<PersisterOperationsResult> {
+  const { persister, jobs } = context.clients.getClients();
+  const config = context.instance.config as WhitehatIntegrationInstanceConfig;
+  const whitehat = new WhitehatClient(config.whitehatApiKey);
+
+  const account = toAccountEntity(
+    (await whitehat.getResources()).account,
+    context.instance,
+  );
+
+  const { vulnerabilities, cveMap, serviceMap, findingMap } = processFindings(
+    await getFindings(whitehat, jobs),
+  );
 
   return persister.publishPersisterOperations(
     await createOperationsFromAccount(context, account),
     await createOperationsFromFindings(
       context,
       account,
-      Object.values(vulnerabilityMap),
+      vulnerabilities,
       cveMap,
       serviceMap,
       findingMap,

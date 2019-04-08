@@ -7,7 +7,6 @@ import {
   WHITEHAT_ACCOUNT_SERVICE_RELATIONSHIP_TYPE,
   WHITEHAT_CVE_ENTITY_TYPE,
   WHITEHAT_FINDING_ENTITY_TYPE,
-  WHITEHAT_SERVICE_ENTITY_TYPE,
   WHITEHAT_SERVICE_VULNERABILITY_RELATIONSHIP_TYPE,
   WHITEHAT_VULNERABILITY_CVE_RELATIONSHIP_TYPE,
   WHITEHAT_VULNERABILITY_ENTITY_TYPE,
@@ -79,18 +78,6 @@ export function toAccountEntity(
     _type: WHITEHAT_ACCOUNT_ENTITY_TYPE,
     name: account.company,
     displayName: account.company,
-  };
-}
-
-export function toServiceEntity(): ServiceEntity {
-  // TODO: fetch dynamic scans from dynamic scan api
-  return {
-    _class: "Service",
-    _key: `whitehat-scan-static`,
-    _type: WHITEHAT_SERVICE_ENTITY_TYPE,
-    category: "software",
-    displayName: "STATIC",
-    name: "STATIC",
   };
 }
 
