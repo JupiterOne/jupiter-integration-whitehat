@@ -10,7 +10,6 @@ import {
 import {
   WHITEHAT_ACCOUNT_ENTITY_TYPE,
   WHITEHAT_ACCOUNT_SERVICE_RELATIONSHIP_TYPE,
-  WHITEHAT_FINDING_ENTITY_TYPE,
   WHITEHAT_SERVICE_ENTITY_TYPE,
   WHITEHAT_SERVICE_VULNERABILITY_RELATIONSHIP_TYPE,
   WHITEHAT_VULNERABILITY_CVE_RELATIONSHIP_TYPE,
@@ -79,6 +78,8 @@ export async function createOperationsFromFindings(
     }
   }
 
+  const { persister } = context.clients.getClients();
+
   const entityOperations = [
     ...(await toEntityOperations(
       context,
@@ -90,11 +91,7 @@ export async function createOperationsFromFindings(
       Object.values(serviceMap),
       WHITEHAT_SERVICE_ENTITY_TYPE,
     )),
-    ...(await toEntityOperations(
-      context,
-      findingEntities,
-      WHITEHAT_FINDING_ENTITY_TYPE,
-    )),
+    ...(await persister.processEntities([], findingEntities)),
   ];
 
   const relationshipOperations = [
