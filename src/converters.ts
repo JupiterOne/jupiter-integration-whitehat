@@ -119,7 +119,7 @@ export function toVulnerabilityEntity(
 
 export function toFindingEntity(finding: FindingData): FindingEntity {
   return {
-    _class: "Vulnerability",
+    _class: "Finding",
     _key: `whitehat-finding-${finding.id}`,
     _type: WHITEHAT_FINDING_ENTITY_TYPE,
 
