@@ -123,6 +123,9 @@ export function toFindingEntity(finding: FindingData): FindingEntity {
     _key: `whitehat-finding-${finding.id}`,
     _type: WHITEHAT_FINDING_ENTITY_TYPE,
 
+    name: finding.class,
+    displayName: finding.class_readable,
+
     impacts: finding.application.label.split("/").pop() as string,
 
     open: finding.status === "open",
