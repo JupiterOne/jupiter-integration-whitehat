@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/jupiter-integration-whitehat",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "A JupiterOne managed integration for https://www.whitehatsec.com/",
   "main": "index.js",
   "repository": "https://github.com/jupiterone-io/jupiter-integration-whitehat",
