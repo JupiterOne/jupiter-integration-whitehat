@@ -126,7 +126,7 @@ export function toFindingEntity(finding: FindingData): FindingEntity {
     name: finding.class,
     displayName: finding.class_readable,
 
-    impacts: finding.application.label.split("/").pop() as string,
+    targets: finding.application.label.split("/").pop() as string,
 
     open: finding.status === "open",
 
