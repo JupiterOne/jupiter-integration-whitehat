@@ -87,7 +87,7 @@ export function toCVEEntities(finding: FindingData): CVEEntity[] {
   for (const cve of finding.cve_reference.collection) {
     cveEntities.push({
       _class: "Vulnerability",
-      _key: cve.title,
+      _key: cve.title.toLowerCase(),
       _type: WHITEHAT_CVE_ENTITY_TYPE,
       name: cve.title,
       displayName: cve.title,
@@ -126,7 +126,7 @@ export function toFindingEntity(finding: FindingData): FindingEntity {
     name: finding.class,
     displayName: finding.class_readable,
 
-    impacts: finding.application.label.split("/").pop() as string,
+    targets: finding.application.label.split("/").pop() as string,
 
     open: finding.status === "open",
 
