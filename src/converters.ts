@@ -23,6 +23,7 @@ import {
   VulnerabilityEntity,
   VulnerabilityFindingRelationship,
 } from "./types";
+import getTime from "./utils/getTime";
 
 export interface AccountData {
   company: string;
@@ -135,9 +136,9 @@ export function toFindingEntity(finding: FindingData): FindingEntity {
     impact: finding.impact,
     risk: finding.risk,
 
-    foundDate: finding.found,
-    modifiedDate: finding.modified,
-    resolvedDate: finding.closed,
+    foundDate: getTime(finding.found)!,
+    modifiedDate: getTime(finding.modified)!,
+    resolvedDate: getTime(finding.closed),
 
     location: finding.location,
   };

@@ -49,9 +49,9 @@ export interface FindingEntity extends EntityFromIntegration {
   impact: number;
   risk: string;
 
-  foundDate: string;
-  modifiedDate: string;
-  resolvedDate: string | null;
+  foundDate: number;
+  modifiedDate: number;
+  resolvedDate: number | null;
 
   location: string;
 }
