@@ -2,11 +2,11 @@ import {
   EntityFromIntegration,
   EntityOperation,
   IntegrationExecutionContext,
-  IntegrationInvocationEvent,
   PersisterOperations,
   RelationshipFromIntegration,
   RelationshipOperation,
 } from "@jupiterone/jupiter-managed-integration-sdk";
+
 import {
   WHITEHAT_ACCOUNT_ENTITY_TYPE,
   WHITEHAT_ACCOUNT_SERVICE_RELATIONSHIP_TYPE,
@@ -36,7 +36,7 @@ import {
 } from "./types";
 
 export async function createOperationsFromFindings(
-  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
+  context: IntegrationExecutionContext,
   accountEntity: AccountEntity,
   vulnerabilityEntities: VulnerabilityEntity[],
   cveMap: CVEEntityMap,
@@ -121,7 +121,7 @@ export async function createOperationsFromFindings(
 }
 
 export async function createOperationsFromAccount(
-  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
+  context: IntegrationExecutionContext,
   accountEntity: AccountEntity,
 ): Promise<PersisterOperations> {
   return [
@@ -135,7 +135,7 @@ export async function createOperationsFromAccount(
 }
 
 async function toEntityOperations<T extends EntityFromIntegration>(
-  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
+  context: IntegrationExecutionContext,
   entities: T[],
   type: string,
 ): Promise<EntityOperation[]> {
@@ -145,7 +145,7 @@ async function toEntityOperations<T extends EntityFromIntegration>(
 }
 
 async function toRelationshipOperations<T extends RelationshipFromIntegration>(
-  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
+  context: IntegrationExecutionContext,
   relationships: T[],
   type: string,
 ): Promise<RelationshipOperation[]> {
