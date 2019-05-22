@@ -1,10 +1,10 @@
 import {
   IntegrationExecutionContext,
-  IntegrationInvocationEvent,
+  IntegrationInstance,
   PersisterOperationsResult,
 } from "@jupiterone/jupiter-managed-integration-sdk";
-import JobsClient from "@jupiterone/jupiter-managed-integration-sdk/service/JobsClient";
 import WhitehatClient from "@jupiterone/whitehat-client";
+
 import { DEFAULT_SERVICE_ENTITY_MAP } from "./constants";
 import {
   FindingData,
@@ -25,6 +25,7 @@ import {
   VulnerabilityEntityMap,
   WhitehatIntegrationInstanceConfig,
 } from "./types";
+import getLastSyncTime from "./utils/getLastSyncTime";
 
 interface ProcessFindingsResults {
   vulnerabilities: VulnerabilityEntity[];
@@ -35,14 +36,14 @@ interface ProcessFindingsResults {
 }
 
 async function getFindings(
+  instance: IntegrationInstance,
   whitehatClient: any,
-  jobsClient: JobsClient,
 ): Promise<FindingData[]> {
   const queryParams = ["query_status=open,closed"];
 
-  const lastJob = await jobsClient.getLastCompleted();
-  if (lastJob) {
-    const lastJobCreatedDate = new Date(lastJob.createDate).toISOString();
+  const lastSyncTime = await getLastSyncTime(instance);
+  if (lastSyncTime) {
+    const lastJobCreatedDate = new Date(lastSyncTime).toISOString();
     queryParams.push(
       `query_opened_after=${lastJobCreatedDate}`,
       `query_closed_after=${lastJobCreatedDate}`,
@@ -80,19 +81,19 @@ function processFindings(findings: FindingData[]): ProcessFindingsResults {
 }
 
 export default async function synchronize(
-  context: IntegrationExecutionContext<IntegrationInvocationEvent>,
+  context: IntegrationExecutionContext,
 ): Promise<PersisterOperationsResult> {
-  const { persister, jobs } = context.clients.getClients();
+  const { persister } = context.clients.getClients();
   const config = context.instance.config as WhitehatIntegrationInstanceConfig;
-  const whitehat = new WhitehatClient(config.whitehatApiKey);
+  const whitehatClient = new WhitehatClient(config.whitehatApiKey);
 
   const account = toAccountEntity(
-    (await whitehat.getResources()).account,
+    (await whitehatClient.getResources()).account,
     context.instance,
   );
 
   const { vulnerabilities, cveMap, serviceMap, findingMap } = processFindings(
-    await getFindings(whitehat, jobs),
+    await getFindings(context.instance, whitehatClient),
   );
 
   return persister.publishPersisterOperations(
