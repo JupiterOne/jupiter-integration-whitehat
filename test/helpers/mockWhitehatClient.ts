@@ -8,12 +8,12 @@ interface ResourcesData {
   account: AccountData;
 }
 
-const mockApplication: ApplicationData = {
+export const mockApplication: ApplicationData = {
   id: "123456",
   label: "my-app",
 };
 
-const mockFinding: FindingData = {
+export const mockFinding: FindingData = {
   application: mockApplication,
   class: "My.Mock.Class",
   class_readable: "My Mock Class",
@@ -39,7 +39,7 @@ const mockFinding: FindingData = {
   status: "open",
 };
 
-const mockResources: ResourcesData = {
+export const mockResources: ResourcesData = {
   account: {
     company: "LifeOmic",
   },

@@ -31,6 +31,7 @@ export interface VulnerabilityEntity extends EntityFromIntegration {
   category: string;
   name: string;
   scanType: string;
+  createdOn: number;
 }
 
 export interface FindingEntityMap {
@@ -49,6 +50,7 @@ export interface FindingEntity extends EntityFromIntegration {
   impact: number;
   risk: string;
 
+  createdOn: number;
   foundDate: number;
   modifiedDate: number;
   resolvedDate: number | null;

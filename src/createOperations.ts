@@ -81,11 +81,7 @@ export async function createOperationsFromFindings(
   const { persister } = context.clients.getClients();
 
   const entityOperations = [
-    ...(await toEntityOperations(
-      context,
-      vulnerabilityEntities,
-      WHITEHAT_VULNERABILITY_ENTITY_TYPE,
-    )),
+    ...(await toVulnerabilityEntityOperations(context, vulnerabilityEntities)),
     ...(await toEntityOperations(
       context,
       Object.values(serviceMap),
@@ -132,6 +128,34 @@ export async function createOperationsFromAccount(
     ),
     [],
   ];
+}
+
+async function toVulnerabilityEntityOperations(
+  context: IntegrationExecutionContext,
+  entities: VulnerabilityEntity[],
+): Promise<EntityOperation[]> {
+  const { graph, persister } = context.clients.getClients();
+  const vulnerabilitiesFromGraph = (await graph.findAllEntitiesByType(
+    WHITEHAT_VULNERABILITY_ENTITY_TYPE,
+  )) as VulnerabilityEntity[];
+
+  for (const vulnerability of entities) {
+    const vulnerabilityFromGraph = vulnerabilitiesFromGraph.find(
+      v => v._key === vulnerability._key,
+    );
+
+    // If the existing vulnerability has an older createdOn date, we keep the
+    // older date because it should be the date of the earliest finding for the
+    // vulnerability.
+    if (
+      vulnerabilityFromGraph &&
+      vulnerabilityFromGraph.createdOn < vulnerability.createdOn
+    ) {
+      vulnerability.createdOn = vulnerabilityFromGraph.createdOn;
+    }
+  }
+
+  return persister.processEntities(vulnerabilitiesFromGraph, entities);
 }
 
 async function toEntityOperations<T extends EntityFromIntegration>(

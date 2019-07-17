@@ -115,6 +115,7 @@ export function toVulnerabilityEntity(
     name: finding.class_readable,
     displayName: finding.class_readable,
     scanType: "STATIC",
+    createdOn: getTime(finding.found)!,
   };
 }
 
@@ -136,6 +137,7 @@ export function toFindingEntity(finding: FindingData): FindingEntity {
     impact: finding.impact,
     risk: finding.risk,
 
+    createdOn: getTime(finding.found)!,
     foundDate: getTime(finding.found)!,
     modifiedDate: getTime(finding.modified)!,
     resolvedDate: getTime(finding.closed),
