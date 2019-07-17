@@ -37,10 +37,9 @@ const persisterOperations = {
 
 const testContext = {
   instance: {
-    config: {
-      veracodeApiId: "some-id",
-      veracodeApiSecret: "some-secret",
-    },
+    // synchronize expects a config, but since we mock out the Whitehat client,
+    // it can be empty
+    config: {},
   },
 };
 const executionContext = createTestIntegrationExecutionContext(testContext);
