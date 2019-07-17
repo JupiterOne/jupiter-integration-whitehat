@@ -15,6 +15,7 @@ test("convert to finding entity", async () => {
     _class: "Finding",
     _key: "whitehat-finding-987",
     _type: "whitehat_finding",
+    createdOn: 1555969433000,
     cvss: "6.9",
     displayName: "My Mock Class",
     foundDate: 1555969433000,

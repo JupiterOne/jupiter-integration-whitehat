@@ -63,7 +63,20 @@ function processFindings(findings: FindingData[]): ProcessFindingsResults {
   const findingMap: FindingEntityMap = {};
 
   for (const finding of findings) {
-    vulnerabilityMap[finding.class] = toVulnerabilityEntity(finding);
+    const vulnerability = toVulnerabilityEntity(finding);
+    const existingVulnerability = vulnerabilityMap[finding.class];
+
+    // For a given finding class, the only differentiator between resulting
+    // vulnerabilities should be createdOn. We want to keep the older createdOn
+    // because a vulnerability's createdOn should be the date of the earliest
+    // finding of the vulnerability.
+    if (
+      !existingVulnerability ||
+      (existingVulnerability &&
+        existingVulnerability.createdOn > vulnerability.createdOn)
+    ) {
+      vulnerabilityMap[finding.class] = vulnerability;
+    }
 
     cveMap[finding.class] = toCVEEntities(finding);
 
