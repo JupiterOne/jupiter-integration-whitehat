@@ -1,5 +1,5 @@
 {
-  "name": "@jupiterone/jupiter-integration-whitehat",
+  "name": "@jupiterone/graph-whitehat",
   "version": "1.0.5",
   "description": "A JupiterOne managed integration for https://www.whitehatsec.com/",
   "main": "dist/index.js",
