@@ -3,7 +3,7 @@
   "version": "1.0.5",
   "description": "A JupiterOne managed integration for https://www.whitehatsec.com/",
   "main": "dist/index.js",
-  "repository": "https://github.com/jupiterone-io/jupiter-integration-whitehat",
+  "repository": "https://github.com/jupiterone/graph-whitehat",
   "license": "SEE LICENSE IN LICENSE",
   "files": [
     "LICENSE",
