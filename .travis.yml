@@ -20,5 +20,5 @@ deploy:
   on:
     tags: true
     branch: master
-    repo: JupiterOne/jupiter-integration-whitehat
+    repo: JupiterOne/graph-whitehat
     node: '8'
