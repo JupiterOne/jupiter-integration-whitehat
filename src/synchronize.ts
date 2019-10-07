@@ -1,6 +1,5 @@
 import {
   IntegrationExecutionContext,
-  IntegrationInstance,
   PersisterOperationsResult,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 import WhitehatClient from "@jupiterone/whitehat-client";
@@ -36,12 +35,12 @@ interface ProcessFindingsResults {
 }
 
 async function getFindings(
-  instance: IntegrationInstance,
+  context: IntegrationExecutionContext,
   whitehatClient: any,
 ): Promise<FindingData[]> {
   const queryParams = ["query_status=open,closed"];
 
-  const lastSyncTime = await getLastSyncTime(instance);
+  const lastSyncTime = await getLastSyncTime(context);
   if (lastSyncTime) {
     const lastJobCreatedDate = new Date(lastSyncTime).toISOString();
     queryParams.push(
@@ -106,7 +105,7 @@ export default async function synchronize(
   );
 
   const { vulnerabilities, cveMap, serviceMap, findingMap } = processFindings(
-    await getFindings(context.instance, whitehatClient),
+    await getFindings(context, whitehatClient),
   );
 
   return persister.publishPersisterOperations(
