@@ -1,7 +1,4 @@
-import {
-  IntegrationInstance,
-  RelationshipDirection,
-} from "@jupiterone/jupiter-managed-integration-sdk";
+import { RelationshipDirection } from "@jupiterone/jupiter-managed-integration-sdk";
 import {
   WHITEHAT_ACCOUNT_ENTITY_TYPE,
   WHITEHAT_ACCOUNT_SERVICE_RELATIONSHIP_TYPE,
@@ -71,7 +68,7 @@ export interface FindingData {
 
 export function toAccountEntity(
   account: AccountData,
-  instance: IntegrationInstance,
+  instance: { id: string },
 ): AccountEntity {
   return {
     _class: "Account",

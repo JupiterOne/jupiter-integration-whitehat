@@ -28,8 +28,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jupiterone/jupiter-managed-integration-sdk": "^33.7.5",
-    "@jupiterone/whitehat-client": "^0.3.0"
+    "@jupiterone/jupiter-managed-integration-sdk": "^36.0.0",
+    "@jupiterone/whitehat-client": "^0.3.0",
+    "aws-sdk": "^2.828.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
