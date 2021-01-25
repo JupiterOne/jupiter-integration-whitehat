@@ -87,7 +87,10 @@ export async function createOperationsFromFindings(
       Object.values(serviceMap),
       WHITEHAT_SERVICE_ENTITY_TYPE,
     )),
-    ...(await persister.processEntities([], findingEntities)),
+    ...persister.processEntities({
+      oldEntities: [],
+      newEntities: findingEntities,
+    }),
   ];
 
   const relationshipOperations = [
@@ -155,25 +158,28 @@ async function toVulnerabilityEntityOperations(
     }
   }
 
-  return persister.processEntities(vulnerabilitiesFromGraph, entities);
+  return persister.processEntities({
+    oldEntities: vulnerabilitiesFromGraph,
+    newEntities: entities,
+  });
 }
 
 async function toEntityOperations<T extends EntityFromIntegration>(
   context: IntegrationExecutionContext,
-  entities: T[],
+  newEntities: T[],
   type: string,
 ): Promise<EntityOperation[]> {
   const { graph, persister } = context.clients.getClients();
   const oldEntities = await graph.findEntitiesByType(type);
-  return persister.processEntities(oldEntities, entities);
+  return persister.processEntities({ oldEntities, newEntities });
 }
 
 async function toRelationshipOperations<T extends RelationshipFromIntegration>(
   context: IntegrationExecutionContext,
-  relationships: T[],
+  newRelationships: T[],
   type: string,
 ): Promise<RelationshipOperation[]> {
   const { graph, persister } = context.clients.getClients();
   const oldRelationships = await graph.findRelationshipsByType(type);
-  return persister.processRelationships(oldRelationships, relationships);
+  return persister.processRelationships({ oldRelationships, newRelationships });
 }

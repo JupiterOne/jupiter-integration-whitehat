@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-whitehat",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A JupiterOne managed integration for https://www.whitehatsec.com/",
   "main": "dist/index.js",
   "repository": "https://github.com/jupiterone/graph-whitehat",
@@ -28,8 +28,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jupiterone/jupiter-managed-integration-sdk": "^33.7.5",
-    "@jupiterone/whitehat-client": "^0.3.0"
+    "@jupiterone/jupiter-managed-integration-sdk": "^36.0.1",
+    "@jupiterone/whitehat-client": "^0.3.0",
+    "aws-sdk": "^2.828.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

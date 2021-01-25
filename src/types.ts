@@ -2,7 +2,6 @@ import {
   EntityFromIntegration,
   RelationshipFromIntegration,
   RelationshipMapping,
-  TargetEntityProperties,
 } from "@jupiterone/jupiter-managed-integration-sdk";
 
 export interface WhitehatIntegrationInstanceConfig {
@@ -62,7 +61,7 @@ export interface CVEEntityMap {
   [id: string]: CVEEntity[];
 }
 
-export interface CVEEntity extends TargetEntityProperties {
+export interface CVEEntity extends EntityFromIntegration {
   name: string;
   references: string[];
 }
