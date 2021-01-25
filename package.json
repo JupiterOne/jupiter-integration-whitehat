@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-whitehat",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A JupiterOne managed integration for https://www.whitehatsec.com/",
   "main": "dist/index.js",
   "repository": "https://github.com/jupiterone/graph-whitehat",
